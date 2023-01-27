@@ -1,3 +1,4 @@
+import workoutRepository from "@/repositories/workout-repository";
 import workoutService from "@/services/workout-service.ts";
 import { Request, Response } from "express";
 import status from "http-status";
@@ -12,7 +13,7 @@ export async function getWorkouts(req: Request, res: Response) {
   const userId = 2;
   try {
     const workouts = await workoutService.findAllWorkoutsByUserId(userId);
-    return workouts;
+    return res.send(workouts);
   } catch (error) {
     return res.sendStatus(status.UNAUTHORIZED);
   }
