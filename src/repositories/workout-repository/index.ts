@@ -4,23 +4,23 @@ async function createInit() {
   return prisma.workout.createMany({
     data: [
       {
-        title: "treino A",
+        title: "treinoA",
         userId: 2,
       },
       {
-        title: "treino B",
+        title: "treinoB",
         userId: 2,
       },
       {
-        title: "treino C",
+        title: "treinoC",
         userId: 2,
       },
       {
-        title: "treino D",
+        title: "treinoD",
         userId: 2,
       },
       {
-        title: "treino E",
+        title: "treinoE",
         userId: 2,
       },
     ],
