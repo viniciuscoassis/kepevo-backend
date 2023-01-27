@@ -4,6 +4,6 @@ import { Router } from "express";
 const workoutRouter = Router();
 
 workoutRouter.get("/", getWorkouts);
-workoutRouter.put("/init", renameWorkout);
+workoutRouter.put("/id", renameWorkout);
 
 export { workoutRouter };

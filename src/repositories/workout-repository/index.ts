@@ -1,9 +1,5 @@
 import { prisma } from "@/config";
 
-async function updateName() {
-  return prisma.workout.findFirst();
-}
-
 async function createInit() {
   return prisma.workout.createMany({
     data: [
@@ -32,11 +28,13 @@ async function createInit() {
 }
 
 async function findAllByUser(userId: number) {
-  return prisma.workout.findMany({ where: { userId } });
+  return prisma.workout.findMany({
+    where: { userId },
+    include: { WorkoutExercise: true },
+  });
 }
 
 const workoutRepository = {
-  updateName,
   findAllByUser,
   createInit,
 };
