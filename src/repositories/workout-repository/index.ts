@@ -30,7 +30,13 @@ async function createInit() {
 async function findAllByUser(userId: number) {
   return prisma.workout.findMany({
     where: { userId },
-    include: { WorkoutExercise: true },
+    include: {
+      WorkoutExercise: {
+        select: {
+          MuscleGroups: true,
+        },
+      },
+    },
   });
 }
 
