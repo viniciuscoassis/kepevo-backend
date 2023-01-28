@@ -1,4 +1,5 @@
 import { prisma } from "@/config";
+import { WorkoutWithExerciseAndMuscleGroup } from "./interface";
 
 async function createInit() {
   return prisma.workout.createMany({
@@ -28,11 +29,11 @@ async function createInit() {
 }
 
 async function findAllByUser(userId: number) {
-  return prisma.workout.findMany({
+  return await prisma.workout.findMany({
     where: { userId },
     include: {
       WorkoutExercise: {
-        select: {
+        include: {
           MuscleGroups: true,
         },
       },
