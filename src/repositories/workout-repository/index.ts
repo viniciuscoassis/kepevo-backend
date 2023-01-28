@@ -1,5 +1,4 @@
 import { prisma } from "@/config";
-import { WorkoutWithExerciseAndMuscleGroup } from "./interface";
 
 async function createInit() {
   return prisma.workout.createMany({

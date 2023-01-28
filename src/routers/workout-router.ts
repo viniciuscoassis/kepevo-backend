@@ -1,9 +1,9 @@
 import { getWorkouts, renameWorkout } from "@/controllers";
 import { Router } from "express";
 
-const workoutRouter = Router();
+const WorkoutRouter = Router();
 
-workoutRouter.get("/", getWorkouts);
-workoutRouter.put("/id", renameWorkout);
+WorkoutRouter.get("/", getWorkouts);
+WorkoutRouter.put("/id", renameWorkout);
 
-export { workoutRouter };
+export { WorkoutRouter };

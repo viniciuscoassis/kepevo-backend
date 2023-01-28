@@ -1,1 +1,2 @@
-export * from "./workout-router"
+export * from "./workout-router";
+export * from "./exercise-router";
