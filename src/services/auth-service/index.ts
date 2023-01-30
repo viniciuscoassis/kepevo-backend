@@ -2,12 +2,18 @@ import usersRepository from "@/repositories/user-repository";
 import { User } from "@prisma/client";
 import { invalidBodyError } from "./error";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import sessionRepository from "@/repositories/session-repository";
+import { exclude } from "@/utils/prisma-utils";
 
 async function signIn(body: SignInType) {
   const user = await getUserOrFail(body.email);
 
   await validatePasswordOrFail(body.password, user.password);
-  return user;
+
+  const token = await createSession(user.id);
+
+  return { user: exclude(user, "password"), token };
 }
 
 async function getUserOrFail(email: string): Promise<GerUserOrFail> {
@@ -19,6 +25,16 @@ async function getUserOrFail(email: string): Promise<GerUserOrFail> {
   if (!user) throw invalidBodyError();
 
   return user;
+}
+
+async function createSession(userId: number) {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET);
+  await sessionRepository.createSession({
+    token,
+    userId,
+  });
+
+  return token;
 }
 
 async function validatePasswordOrFail(password: string, userPassword: string) {

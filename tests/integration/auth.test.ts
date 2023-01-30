@@ -2,8 +2,6 @@ import app, { init } from "@/app";
 import usersService from "@/services/users-service";
 import httpStatus from "http-status";
 import supertest from "supertest";
-import { createUser } from "../factories/user-factory";
-
 import { cleanDb } from "../helpers";
 
 beforeAll(async () => {
@@ -38,7 +36,7 @@ describe("POST /auth/login", () => {
     const response = await server.post("/auth/login").send(newBody);
     expect(response.status).toEqual(httpStatus.UNAUTHORIZED);
   });
-  it("should respond with status 200 ", async () => {
+  it("should respond with status 200 returning user and token", async () => {
     const newBody = {
       email: "vini@gmail.com",
       password: "vini123",
@@ -47,5 +45,12 @@ describe("POST /auth/login", () => {
 
     const response = await server.post("/auth/login").send(newBody);
     expect(response.status).toEqual(httpStatus.OK);
+    expect(response.body).toEqual({
+      user: {
+        id: expect.any(Number),
+        email: newBody.email,
+      },
+      token: expect.any(String),
+    });
   });
 });
