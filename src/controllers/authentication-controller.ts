@@ -6,6 +6,8 @@ import httpStatus from "http-status";
 export async function postSignIn(req: Request, res: Response) {
   const { email, password } = req.body;
 
+  if (!email || !password) return res.sendStatus(httpStatus.BAD_REQUEST);
+
   try {
     const response = await authService.signIn({ email, password });
 
