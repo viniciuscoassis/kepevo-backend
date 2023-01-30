@@ -9,8 +9,15 @@ async function upsert(body: NewExerciseType) {
   });
 }
 
+async function findById(id: number) {
+  return prisma.workoutExercise.findUnique({
+    where: { id },
+  });
+}
+
 const exerciseRepository = {
   upsert,
+  findById,
 };
 
 export { exerciseRepository };

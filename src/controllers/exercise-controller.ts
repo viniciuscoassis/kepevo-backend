@@ -1,5 +1,5 @@
 import { NewExerciseType } from "@/protocols/newExercise";
-import { ExerciseService } from "@/services/exercise-service.ts";
+import { ExerciseService } from "@/services/exercise-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
