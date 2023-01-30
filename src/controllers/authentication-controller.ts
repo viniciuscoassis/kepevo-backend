@@ -13,6 +13,8 @@ export async function postSignIn(req: Request, res: Response) {
 
     return res.status(httpStatus.OK).send(response);
   } catch (err) {
+    if (err.name === "invalidUserSent")
+      return res.status(404).send(err.message);
     return res.status(httpStatus.UNAUTHORIZED).send({});
   }
 }

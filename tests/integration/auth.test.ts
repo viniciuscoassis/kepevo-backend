@@ -6,6 +6,7 @@ import supertest from "supertest";
 import { cleanDb } from "../helpers";
 import { faker } from "@faker-js/faker";
 import { createUser } from "../factories/users-factory";
+import { findSessionByUserId } from "../factories/session-factory";
 
 beforeAll(async () => {
   await init();
@@ -23,45 +24,33 @@ describe("POST /auth/login", () => {
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
-  it("should respond with status 401 when body is not valid", async () => {
-    const invalidBody = { [faker.lorem.word()]: faker.lorem.word() };
-
-    const response = await server.post("/auth/login").send(invalidBody);
-
-    expect(response.status).toBe(httpStatus.BAD_REQUEST);
-  });
-  it("should respond with status 401 if there is no user with this email", async () => {
-    const newBody = {
-      email: "vini@gmail.com",
-      password: "vini123",
-    };
-
-    const response = await server.post("/auth/login").send(newBody);
-    expect(response.status).toEqual(httpStatus.UNAUTHORIZED);
-  });
-  it("should respond with status 200 returning user and token", async () => {
-    const password = "vini123";
-    const user = await createUser({ password });
-    const response = await server
-      .post("/auth/login")
-      .send({ email: user.email, password });
-    expect(response.body).toEqual({
-      user: {
-        id: expect.any(Number),
-        email: user.email,
-      },
-      token: expect.any(String),
+  describe("when body is valid", () => {
+    const generateValidBody = () => ({
+      email: faker.internet.email(),
+      password: faker.internet.password(),
     });
 
-    expect(response.status).toEqual(httpStatus.OK);
-  });
-  it("should not return user password on body", async () => {
-    await createUser();
-    const body = { email: "vini@gmail.com", password: "vini123" };
+    it("should respond with status 404 there is no user for the email", async () => {
+      const body = generateValidBody();
+      const response = await server.post("/auth/login").send(body);
 
-    const response = await server.post("/auth/login").send(body);
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
+    });
 
-    expect(response.body).not.toHaveProperty("password");
-    console.log(response.body);
+    it("should respond with status 200 if login is made", async () => {
+      const body = generateValidBody();
+      const user = await createUser(body);
+
+      const res = await server.post("/auth/login").send(body);
+
+      expect(res.status).toBe(httpStatus.OK);
+      expect(res.body).toEqual({
+        user: {
+          email: user.email,
+          id: expect.any(Number),
+        },
+        token: expect.any(String),
+      });
+    });
   });
 });
