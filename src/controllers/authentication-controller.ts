@@ -15,6 +15,6 @@ export async function postSignIn(req: Request, res: Response) {
   } catch (err) {
     if (err.name === "invalidUserSent")
       return res.status(404).send(err.message);
-    return res.status(httpStatus.UNAUTHORIZED).send({});
+    return res.status(httpStatus.UNAUTHORIZED).send(err);
   }
 }

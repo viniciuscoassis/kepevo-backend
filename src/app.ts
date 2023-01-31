@@ -13,7 +13,7 @@ const app = express();
 
 app
   .use(cors())
-  .use(express.json())
+  .use(express.json({ limit: "50mb" }))
   .get("/status", (req, res) => res.send("OK!"))
   .use("/users", userRouter)
   .use("/auth", authenticationRouter)

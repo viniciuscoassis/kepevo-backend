@@ -16,20 +16,37 @@ beforeEach(async () => {
 const server = supertest(app);
 
 describe("POST /users", () => {
-  it("should respond with status 409 if email is not unique", async () => {
-    const user = await createUser();
-    const body = { email: user.email, password: faker.internet.password() };
-    const response = await server.post("/users").send(body);
-    expect(response.status).toEqual(httpStatus.CONFLICT);
-  });
-  it("should respond with 201 and return created user", async () => {
-    const body = { email: "vini@gmail.com", password: "vini123" };
-    const response = await server.post("/users").send(body);
+  it("should respond with status 400 invalid or inexistent body", async () => {
+    const invalidBody = {
+      idade: 20,
+      name: faker.name,
+    };
 
-    expect(response.body).toEqual({
-      id: expect.any(Number),
-      email: body.email,
+    const response = await server.post("/users").send(invalidBody);
+    expect(response.status).toEqual(httpStatus.BAD_REQUEST);
+  });
+  describe("when body is valid", () => {
+    const validBodyGenetation = () => ({
+      email: faker.internet.email(),
+      password: faker.internet.password(),
     });
-    expect(response.status).toEqual(httpStatus.CREATED);
+    it("should respond with status 409 if email given already exists", async () => {
+      const body = validBodyGenetation();
+      await createUser(body);
+
+      const response = await server.post("/users").send(body);
+      expect(response.status).toEqual(httpStatus.CONFLICT);
+    });
+
+    it("should respond with status 201 if user is created", async () => {
+      const createUserBody = validBodyGenetation();
+
+      const response = await server.post("/users").send(createUserBody);
+      expect(response.status).toEqual(httpStatus.CREATED);
+      expect(response.body).toEqual({
+        id: expect.any(Number),
+        email: createUserBody.email,
+      });
+    });
   });
 });

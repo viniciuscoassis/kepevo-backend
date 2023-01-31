@@ -29,12 +29,16 @@ async function getUserOrFail(email: string): Promise<GerUserOrFail> {
 
 async function createSession(userId: number) {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET);
-  await sessionRepository.createSession({
-    token,
-    userId,
-  });
+  try {
+    await sessionRepository.createSession({
+      userId,
+      token,
+    });
 
-  return token;
+    return token;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function validatePasswordOrFail(password: string, userPassword: string) {

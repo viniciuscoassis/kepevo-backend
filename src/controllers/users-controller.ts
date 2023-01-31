@@ -4,10 +4,11 @@ import httpStatus from "http-status";
 
 export async function createUser(req: Request, res: Response) {
   const { email, password } = req.body;
+  if (!email || !password) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
     const user = await usersService.postNewUser({ email, password });
-    return res.status(httpStatus.CREATED).send({
+    return res.status(httpStatus.CREATED).json({
       id: user.id,
       email: user.email,
     });

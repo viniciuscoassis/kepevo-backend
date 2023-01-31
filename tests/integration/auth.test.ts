@@ -40,7 +40,6 @@ describe("POST /auth/login", () => {
     it("should respond with status 200 if login is made", async () => {
       const body = generateValidBody();
       const user = await createUser(body);
-
       const res = await server.post("/auth/login").send(body);
 
       expect(res.status).toBe(httpStatus.OK);
