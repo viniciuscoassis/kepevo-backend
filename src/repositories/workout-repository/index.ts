@@ -1,27 +1,27 @@
 import { prisma } from "@/config";
 
-async function createInit() {
+async function createInit(userId: number) {
   return prisma.workout.createMany({
     data: [
       {
         title: "treinoA",
-        userId: 2,
+        userId,
       },
       {
         title: "treinoB",
-        userId: 2,
+        userId,
       },
       {
         title: "treinoC",
-        userId: 2,
+        userId,
       },
       {
         title: "treinoD",
-        userId: 2,
+        userId,
       },
       {
         title: "treinoE",
-        userId: 2,
+        userId,
       },
     ],
   });

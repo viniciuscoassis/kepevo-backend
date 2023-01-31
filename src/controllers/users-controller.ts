@@ -1,4 +1,5 @@
 import usersService from "@/services/users-service";
+import workoutService from "@/services/workout-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 

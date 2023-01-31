@@ -7,7 +7,7 @@ async function postNewUser({ email, password }: CreateUserType): Promise<User> {
   await validateUniqueEmailOrFail(email);
 
   const hashPassword = await bcrypt.hash(password, 12);
-  return usersRepository.create({
+  return usersRepository.createAndInit({
     email,
     password: hashPassword,
   });
