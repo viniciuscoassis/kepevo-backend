@@ -13,10 +13,13 @@ export async function createInit(userId: number) {
 }
 
 export async function findAllWorkoutsByUserId(userId: number) {
-  const workouts = workoutRepository.findAllByUser(userId);
-
-  if (!workouts) throw notFoundError();
-  return workouts;
+  try {
+    const workouts = await workoutRepository.findAllByUser(userId);
+    if (workouts.length === 0) throw notFoundError();
+    return workouts;
+  } catch (err) {
+    throw notFoundError();
+  }
 }
 
 const workoutService = {
