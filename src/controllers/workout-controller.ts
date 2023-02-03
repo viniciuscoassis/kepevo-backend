@@ -16,3 +16,17 @@ export async function getWorkouts(req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(status.UNAUTHORIZED);
   }
 }
+export async function getAllMuscleGroups(
+  req: AuthenticatedRequest,
+  res: Response
+) {
+  try {
+    const muscleGroups = await workoutService.findAllMuscleGroups();
+    return res.status(httpStatus.OK).send(muscleGroups);
+  } catch (error) {
+    if (error.name === "NotFoundError") {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    return res.sendStatus(status.UNAUTHORIZED);
+  }
+}

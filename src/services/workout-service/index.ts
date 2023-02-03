@@ -22,9 +22,20 @@ export async function findAllWorkoutsByUserId(userId: number) {
   }
 }
 
+export async function findAllMuscleGroups() {
+  try {
+    const muscleGroups = await workoutRepository.findAllMuscles();
+    if (muscleGroups.length === 0) throw notFoundError();
+    return muscleGroups;
+  } catch (err) {
+    throw notFoundError();
+  }
+}
+
 const workoutService = {
   createInit,
   findAllWorkoutsByUserId,
+  findAllMuscleGroups,
 };
 
 export default workoutService;

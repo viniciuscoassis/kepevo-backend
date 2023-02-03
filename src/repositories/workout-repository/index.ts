@@ -40,9 +40,14 @@ async function findAllByUser(userId: number) {
   });
 }
 
+async function findAllMuscles() {
+  return await prisma.muscleGroups.findMany({});
+}
+
 const workoutRepository = {
   findAllByUser,
   createInit,
+  findAllMuscles,
 };
 
 export default workoutRepository;
