@@ -1,12 +1,18 @@
+import { AuthenticatedRequest } from "@/middlewares";
 import { NewExerciseType } from "@/protocols/newExercise";
 import { ExerciseService } from "@/services/exercise-service";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
-export async function postExercise(req: Request, res: Response) {
-  const body = req.body;
+export async function postExercise(req: AuthenticatedRequest, res: Response) {
+  const { name, workoutId, muscleGroupId } = req.body;
+
   try {
-    const newExercise = await ExerciseService.createExercise(body);
+    const newExercise = await ExerciseService.createExercise({
+      name,
+      workoutId: Number(workoutId),
+      muscleGroupId: Number(muscleGroupId),
+    });
 
     if (!newExercise) return res.sendStatus(httpStatus.BAD_REQUEST);
 
