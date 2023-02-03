@@ -4,13 +4,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  
   "scripts": {
     "test": "NODE_ENV=test jest --passWithNoTests ",
     "dev": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
     "dev:load-envs": "dotenv -e .env.development",
     "test:load-envs": "dotenv -e .env.test",
     "dev:migration:generate": "npm run dev:load-envs prisma migrate dev",
-    "test:migration:generate": "npm run test:load-envs prisma migrate dev"
+    "test:migration:generate": "npm run test:load-envs prisma migrate dev",
+    "dev:seed": "npm run dev:load-envs prisma db seed",
+    "test:seed": "npm run test:load-envs prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [
     "kepevo",
@@ -21,6 +27,7 @@
     "express",
     "nodejs"
   ],
+  
   "author": "Vinicius Assis",
   "license": "ISC",
   "dependencies": {
