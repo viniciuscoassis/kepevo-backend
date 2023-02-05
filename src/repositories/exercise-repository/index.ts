@@ -1,5 +1,7 @@
 import { NewExerciseType } from "@/protocols/newExercise";
 import { prisma } from "@/config";
+import { postWeightRegister } from "@/services/exercise-service";
+import { Prisma } from "@prisma/client";
 
 async function upsert(body: NewExerciseType) {
   return prisma.workoutExercise.upsert({
@@ -9,15 +11,23 @@ async function upsert(body: NewExerciseType) {
   });
 }
 
-async function findById(id: number) {
+async function findById(id: Prisma.WorkoutExerciseWhereUniqueInput) {
   return prisma.workoutExercise.findUnique({
-    where: { id },
+    where: id,
   });
 }
 
-async function findWightHistoryByExerciseId(exerciseId: number) {
+async function findWightHistoryByExerciseId(
+  exerciseId: Prisma.WeightsHistoryWhereInput
+) {
   return prisma.weightsHistory.findMany({
-    where: { exerciseId },
+    where: exerciseId,
+  });
+}
+
+export function createWeightRegister(body: postWeightRegister) {
+  return prisma.weightsHistory.create({
+    data: body,
   });
 }
 
@@ -25,6 +35,7 @@ const exerciseRepository = {
   upsert,
   findById,
   findWightHistoryByExerciseId,
+  createWeightRegister,
 };
 
 export { exerciseRepository };

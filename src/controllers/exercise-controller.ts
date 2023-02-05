@@ -30,9 +30,9 @@ export async function getWeightHistoryById(
   if (!exerciseId) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
-    const weightHistory = await ExerciseService.findWeightHistory(
-      Number(exerciseId)
-    );
+    const weightHistory = await ExerciseService.findWeightHistory({
+      exerciseId: Number(exerciseId),
+    });
 
     if (!weightHistory) return res.sendStatus(httpStatus.NOT_FOUND);
 
@@ -40,6 +40,25 @@ export async function getWeightHistoryById(
   } catch (err) {
     if (err.name === "NotFoundError")
       return res.status(httpStatus.NOT_FOUND).send(err.message);
+    return res.sendStatus(httpStatus.UNAUTHORIZED);
+  }
+}
+
+export async function postWeightRegister(
+  req: AuthenticatedRequest,
+  res: Response
+) {
+  const { exerciseId, value } = req.body;
+  if (!exerciseId || !value) return res.sendStatus(httpStatus.BAD_REQUEST);
+
+  try {
+    const registerCreated = await ExerciseService.createWeightRegister({
+      exerciseId,
+      value,
+    });
+
+    return res.status(httpStatus.CREATED).send(registerCreated);
+  } catch (err) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }
