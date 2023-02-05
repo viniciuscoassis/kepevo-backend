@@ -15,9 +15,16 @@ async function findById(id: number) {
   });
 }
 
+async function findWightHistoryById(id: number) {
+  return prisma.workoutExercise.findUnique({
+    where: { id },
+  });
+}
+
 const exerciseRepository = {
   upsert,
   findById,
+  findWightHistoryById,
 };
 
 export { exerciseRepository };

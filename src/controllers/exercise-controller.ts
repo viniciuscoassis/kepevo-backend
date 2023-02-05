@@ -21,20 +21,21 @@ export async function postExercise(req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }
-export async function getWeightById(req: AuthenticatedRequest, res: Response) {
+export async function getWeightHistoryById(
+  req: AuthenticatedRequest,
+  res: Response
+) {
   const exerciseId = req.query.id;
   console.log(exerciseId);
 
   try {
-    const newExercise = await ExerciseService.createExercise({
-      name,
-      workoutId: Number(workoutId),
-      muscleGroupId: Number(muscleGroupId),
-    });
+    const weightHistory = await ExerciseService.findWeightHistory(
+      Number(exerciseId)
+    );
 
-    if (!newExercise) return res.sendStatus(httpStatus.BAD_REQUEST);
+    if (!weightHistory) return res.sendStatus(httpStatus.NOT_FOUND);
 
-    return res.status(httpStatus.CREATED).send(newExercise);
+    return res.status(httpStatus.CREATED).send(weightHistory);
   } catch (err) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
