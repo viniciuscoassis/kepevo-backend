@@ -11,6 +11,15 @@ export async function createExercise(body: NewExerciseType) {
   }
 }
 
+export async function findWeightHistory(id: number) {
+  try {
+    const newExercise = await exerciseRepository.upsert(body);
+    return newExercise;
+  } catch (err) {
+    throw notFoundError();
+  }
+}
+
 const ExerciseService = {
   createExercise,
 };

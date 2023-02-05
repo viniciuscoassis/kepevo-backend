@@ -21,3 +21,21 @@ export async function postExercise(req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }
+export async function getWeightById(req: AuthenticatedRequest, res: Response) {
+  const exerciseId = req.query.id;
+  console.log(exerciseId);
+
+  try {
+    const newExercise = await ExerciseService.createExercise({
+      name,
+      workoutId: Number(workoutId),
+      muscleGroupId: Number(muscleGroupId),
+    });
+
+    if (!newExercise) return res.sendStatus(httpStatus.BAD_REQUEST);
+
+    return res.status(httpStatus.CREATED).send(newExercise);
+  } catch (err) {
+    return res.sendStatus(httpStatus.UNAUTHORIZED);
+  }
+}
