@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { createSession } from "./factories/session-factory";
 
 export async function cleanDb() {
+  await prisma.weightsHistory.deleteMany({});
   await prisma.workoutExercise.deleteMany({});
   await prisma.muscleGroups.deleteMany({});
   await prisma.session.deleteMany({});

@@ -1,3 +1,4 @@
+import { notFoundError } from "@/errors/not-found-error";
 import { AuthenticatedRequest } from "@/middlewares";
 import { NewExerciseType } from "@/protocols/newExercise";
 import { ExerciseService } from "@/services/exercise-service";
@@ -25,8 +26,8 @@ export async function getWeightHistoryById(
   req: AuthenticatedRequest,
   res: Response
 ) {
-  const exerciseId = req.query.id;
-  console.log(exerciseId);
+  const exerciseId = req.params.id;
+  if (!exerciseId) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
     const weightHistory = await ExerciseService.findWeightHistory(
@@ -35,8 +36,10 @@ export async function getWeightHistoryById(
 
     if (!weightHistory) return res.sendStatus(httpStatus.NOT_FOUND);
 
-    return res.status(httpStatus.CREATED).send(weightHistory);
+    return res.status(httpStatus.OK).send(weightHistory);
   } catch (err) {
+    if (err.name === "NotFoundError")
+      return res.status(httpStatus.NOT_FOUND).send(err.message);
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }

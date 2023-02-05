@@ -11,9 +11,14 @@ export async function createExercise(body: NewExerciseType) {
   }
 }
 
-export async function findWeightHistory(id: number) {
+export async function findWeightHistory(exerciseId: number) {
   try {
-    const history = await exerciseRepository.findWightHistoryById(id);
+    const exercise = await exerciseRepository.findById(exerciseId);
+    if (!exercise) throw notFoundError();
+    const history = await exerciseRepository.findWightHistoryByExerciseId(
+      exerciseId
+    );
+
     return history;
   } catch (err) {
     throw notFoundError();
