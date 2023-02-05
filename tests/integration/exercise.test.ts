@@ -137,10 +137,9 @@ describe("POST exercise/weight", () => {
         .post("/exercise/weight")
         .send(unvalidBody)
         .set("Authorization", `Bearer ${token}`);
-      console.log(response.body);
       expect(response.status).toBe(httpStatus.BAD_REQUEST);
     });
-    it("should respond with status 400 if exercise id does not exists", async () => {
+    it("should respond with status 404 if exercise is not found", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const body = { exerciseId: 1, value: 20 };
@@ -149,7 +148,7 @@ describe("POST exercise/weight", () => {
         .send(body)
         .set("Authorization", `Bearer ${token}`);
       console.log(response.body);
-      expect(response.status).toBe(httpStatus.BAD_REQUEST);
+      expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
     it("should respond with status 201 and return created weight history", async () => {
       const user = await createUser();
@@ -162,7 +161,7 @@ describe("POST exercise/weight", () => {
         .post("/exercise/weight")
         .send(body)
         .set("Authorization", `Bearer ${token}`);
-      console.log(response.body);
+
       expect(response.status).toBe(httpStatus.CREATED);
     });
   });

@@ -15,8 +15,6 @@ export async function postExercise(req: AuthenticatedRequest, res: Response) {
       muscleGroupId: Number(muscleGroupId),
     });
 
-    if (!newExercise) return res.sendStatus(httpStatus.BAD_REQUEST);
-
     return res.status(httpStatus.CREATED).send(newExercise);
   } catch (err) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
@@ -38,7 +36,7 @@ export async function getWeightHistoryById(
 
     return res.status(httpStatus.OK).send(weightHistory);
   } catch (err) {
-    if (err.name === "NotFoundError")
+    if (err.name === "ExerciseNotFoundError")
       return res.status(httpStatus.NOT_FOUND).send(err.message);
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
@@ -59,6 +57,10 @@ export async function postWeightRegister(
 
     return res.status(httpStatus.CREATED).send(registerCreated);
   } catch (err) {
+    if (err.name === "ExerciseNotFoundError") {
+      return res.status(httpStatus.NOT_FOUND).send(err.message);
+    }
+    console.log(err);
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }
